@@ -40,6 +40,7 @@
   },
   "scripts": {
     "install": "node install.js",
+    "test": "cd test && (node index.js; cd -)",
     "configure": "cd gyp && rm -rf ./third-party/* && ./third-party.sh && cd .. && node-gyp configure",
     "build": "node-gyp build",
     "clean": "node-gyp clean"
