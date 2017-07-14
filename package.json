@@ -4,7 +4,7 @@
   "description": "Cross-platform image decoder(webp/png/jpeg/gif) and encoder(webp/png/jpeg) for Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js",
+    "test": "cd test && (node index.js; cd -)",
     "install": "node ./scripts/install.js",
     "configure": "cd gyp && rm -rf ./third-party/* && ./third-party.sh && cd .. && node-gyp configure",
     "build": "node-gyp build",
