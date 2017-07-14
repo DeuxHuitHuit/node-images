@@ -134,7 +134,7 @@ ImageState Image::setError(const char * err){ // {{{
 } // }}}
 
 Local<Value> Image::getError(){ // {{{
-    Local<Value> err = Exception::Error(String::NewFromUtf8(Isolate::GetCurrent(), error ? error : "Unknow Error"));
+    Local<Value> err = Exception::Error(String::NewFromUtf8(Isolate::GetCurrent(), error ? error : "Unknown Error"));
     error = NULL;
     return err;
 } // }}}
@@ -355,7 +355,7 @@ void Image::LoadFromBuffer(const FunctionCallbackInfo<Value> &args) { // {{{
         }
         codec = codec->next;
     }
-    isError() ? (THROW_GET_ERROR()) : THROW_ERROR("Unknow format");
+    isError() ? (THROW_GET_ERROR()) : THROW_ERROR("Unknown format");
     return;
 } // }}}
 
