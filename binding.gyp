@@ -53,6 +53,29 @@
                 'defines': ['HAVE_RAW'],
                 'sources': ['src/Raw.cc']
             }]
-        ]
-    }]
+        ],
+        'cflags': [
+            '-Wall',
+        ],
+        'xcode_settings': {
+            'OTHER_CFLAGS': [
+                '-Wall',
+             ]
+        },
+    }],
+    'configurations': {
+        'Debug': {
+            'cflags': [ '-g', '-O0' ],
+            'xcode_settings': {
+                'OTHER_CFLAGS': [ '-g', '-O0' ]
+            }
+        },
+        'Release': {
+            'cflags': [ '-g', '-O3' ],
+            'defines': [ 'NDEBUG' ],
+            'xcode_settings': {
+                'OTHER_CFLAGS': [ '-g', '-O3' ]
+            }
+        }
+    },
 }
