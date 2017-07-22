@@ -14,7 +14,9 @@
             'src/Resize.cc',
             'src/resampler.cpp'
         ],
-        "include_dirs" : [
+        'defines': [
+            'V8_DEPRECATION_WARNINGS=1',
+            'NODE_IMAGES_ARCH_<(target_arch)',
         ],
         'conditions': [
             ['with_png=="true"', {
