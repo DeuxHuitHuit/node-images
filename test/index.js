@@ -14,6 +14,9 @@ images("input.jpg")
     .resize( 200 )
     .save("output_new.jpg");
 
+images("input.webp")
+     .resize( 200 )
+     .save("output_webp.webp");
 
 images("input.jpg")
     .size( 200 )
@@ -23,6 +26,9 @@ images("input.gif")
     .resize( 200 )
     .save("output_new_gif.jpg");
 
+images("input.webp")
+    .resize( 200 )
+    .save("output_new_webp.jpg");
 
 images("input.gif")
     .size( 200 )
