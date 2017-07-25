@@ -40,7 +40,7 @@
                     'gyp/gyp/giflib.gyp:giflib',
                 ]
             }],
-            ['with_webp=="false"', {
+            ['with_webp=="true"', {
                 'defines': ['HAVE_WEBP'],
                 'sources': ['src/Webp.cc'],
                 'dependencies': [
