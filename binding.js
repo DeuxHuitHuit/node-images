@@ -2,21 +2,28 @@
 'use strict';
 
 var fs = require('fs');
-
-var buildModule = __dirname + '/build/Release/binding.node';
-
-if (fs.existsSync(buildModule)) {
-    try {
-        module.exports = require(buildModule);
-    } catch (e) {
-        console.log('Cant\'t load `.node` module ' + buildModule);
-        throw e;
+var builds = ['Release', 'Debug'];
+var loadBuild = function (build) {
+    var buildModule = __dirname + '/build/' + build + '/binding.node';
+    if (fs.existsSync(buildModule)) {
+        try {
+            module.exports = require(buildModule);
+            return true;
+        } catch (e) {
+            console.log('Cant\'t load `.node` module ' + buildModule);
+            throw e;
+        }
     }
-    return;
+    return false;
+};
+
+for (var i in builds) {
+    if (loadBuild(builds[i])) {
+        return;
+    }
 }
 
 function compiler(a, b) {
-
     if (!/^(?:\d+.?)+$/.test(a) || !/^(?:\d+.?)+/.test(b)) {
         return a > b;
     }
@@ -52,7 +59,7 @@ for ( var i in bindingMap)  {
                 module.exports = require('./bindings/'+ process.platform + '/' + process.arch + '/' + target + '/binding.node');
                 return;
             } catch ( e ) {
-                throw new Error('Can\'t load the addon. Issue to: ' + bugUrl + ' ' + e.stack);
+                throw new Error('Can\'t load the addon. Issue to: ' + bugUrl + '\n' + e.stack);
             }
         }
     }
