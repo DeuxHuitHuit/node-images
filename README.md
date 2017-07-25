@@ -1,7 +1,7 @@
 ![images logo](https://raw.github.com/zhangyuanwei/node-images/master/demo/logo.png)
 ===========
 
-Cross-platform image decoder(png/jpeg/gif) and encoder(png/jpeg) for Node.js  
+Cross-platform image decoder(png/jpeg/gif/webp) and encoder(png/jpeg/web) for Node.js  
 Node.js轻量级跨平台图像编解码库
 
 ``` javascript
