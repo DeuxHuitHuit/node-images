@@ -27,15 +27,17 @@
  */
 
 /**
- * This script will be excuted while npm installing this package.
+ * This script will be executed while npm installing this package.
  *
  * The flow of this script.
- * 1. Accroding to the client's platform download an addon binary
+ * 1. According to the client's platform download an addon binary
  *    package from github.
  * 2. Try the addon if fail then try `node-gyp` to rebuild a new addon bindary
  *    package.
  * 3. Run the test script.
  */
+
+'use strict';
 
 var step = require('step'),
     fs = require('fs'),
