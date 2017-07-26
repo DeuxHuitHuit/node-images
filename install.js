@@ -146,28 +146,9 @@ function download() {
 // try to rebuild this.
 function rebuild( error ) {
     var done = this,
-        cp = require('child_process');
+        args = ['rebuild', '--release', '--silent', '-j 4'];
 
-    cp.spawn(
-        process.platform === 'win32' ? 'node-gyp.cmd' : 'node-gyp', ['rebuild'], {
-        customFds: [0, 1, 2]
-    })
-    .on('exit', function(err) {
-        if (err) {
-            if (err === 127) {
-                console.error(
-                    'node-gyp not found! Please upgrade your install of npm! You need at least 1.1.5 (I think) ' +
-                    'and preferably 1.1.30.'
-                );
-            } else {
-                console.error('Build failed');
-            }
-
-            done( err );
-        }
-
-        done( false );
-    });
+    utils.forkToNodeGyp(args, done);
 }
 
 // simply include the binding.js script.
