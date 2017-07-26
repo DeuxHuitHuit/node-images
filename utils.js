@@ -34,7 +34,7 @@ var fs = require('fs'),
 
 function mkdirP ( p, mode, made ) {
     if (mode === undefined) {
-        mode = 0777 & (~process.umask());
+        mode = parseInt('0777', 8) & (~process.umask());
     }
     if (!made) made = null;
 
