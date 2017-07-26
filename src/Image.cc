@@ -464,7 +464,10 @@ void Image::ToBuffer(const FunctionCallbackInfo<Value> &args) { //{{{
                     if(encoder(pixels, output, config) == SUCCESS){
                         length = output->position;
                         MaybeLocal<Object> maybeBuffer = node::Buffer::New(args.GetIsolate(), (size_t) length);
-                        maybeBuffer.ToLocal(&buffer);
+                        if (!maybeBuffer.ToLocal(&buffer)) {
+                            THROW_ERROR("Failed to convert buffer to local.");
+                            return;
+                        }
                         memcpy(node::Buffer::Data(buffer), output->data, length);
                         free(output->data);
                         args.GetReturnValue().Set(buffer);
