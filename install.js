@@ -41,46 +41,8 @@
 
 var step = require('step'),
     fs = require('fs'),
-    path = require('path');
-
-function mkdirP ( p, mode, made ) {
-    if (mode === undefined) {
-        mode = 0777 & (~process.umask());
-    }
-    if (!made) made = null;
-
-    if (typeof mode === 'string') mode = parseInt(mode, 8);
-    p = path.resolve(p);
-
-    try {
-        fs.mkdirSync(p, mode);
-        made = made || p;
-    }
-    catch (err0) {
-        switch (err0.code) {
-            case 'ENOENT' :
-                made = mkdirP(path.dirname(p), mode, made);
-                mkdirP(p, mode, made);
-                break;
-
-            // In the case of any other error, just see if there's a dir
-            // there already.  If so, then hooray!  If not, then something
-            // is borked.
-            default:
-                var stat;
-                try {
-                    stat = fs.statSync(p);
-                }
-                catch (err1) {
-                    throw err0;
-                }
-                if (!stat.isDirectory()) throw err0;
-                break;
-        }
-    }
-
-    return made;
-}
+    path = require('path'),
+    utils = require('./utils.js');
 
 // Try to download binding.node from github.
 function download() {
@@ -113,32 +75,11 @@ function download() {
             return done( true, '' );
         }
 
-
-        function versionCompare(left, right) {
-            if (typeof left + typeof right != 'stringstring')
-                return false;
-
-            var a = left.split('.'),
-                b = right.split('.'),
-                i = 0,
-                len = Math.max(a.length, b.length);
-
-            for (; i < len; i++) {
-                if ((a[i] && !b[i] && parseInt(a[i], 10) > 0) || (parseInt(a[i], 10) > parseInt(b[i], 10))) {
-                    return 1;
-                } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i], 10) < parseInt(b[i], 10))) {
-                    return -1;
-                }
-            }
-
-            return 0;
-        }
-
         if ( candidates.length ) {
             do {
                 candidate = candidates.pop();
 
-                if ( versionCompare( version, candidate ) >= 0 ) {
+                if ( utils.versionCompare( version, candidate ) >= 0 ) {
                     break;
                 }
 
@@ -169,7 +110,7 @@ function download() {
                 outFile;
 
             if ( res.statusCode === 200 ) {
-                mkdirP( path.dirname( dest ) );
+                utils.mkdirP( path.dirname( dest ) );
                 outFile = fs.openSync( dest, 'w' );
 
                 res.on('data', function( data ) {
