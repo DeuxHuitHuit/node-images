@@ -26,6 +26,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+'use strict';
+
 var USE_OLD_API = false,
     fs = require("fs"),
     path = require("path"),
