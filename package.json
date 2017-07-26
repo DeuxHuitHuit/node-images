@@ -41,9 +41,11 @@
   "scripts": {
     "install": "node install.js",
     "test": "cd test && (node index.js; cd -)",
-    "configure": "cd gyp && rm -rf ./third-party/* && ./third-party.sh && cd .. && node-gyp configure",
+    "configure": "cd gyp; rm -rf ./third-party/* && ./third-party.sh; cd ..; node-gyp configure",
     "build": "node-gyp build",
-    "clean": "node-gyp clean"
+    "clean": "node-gyp clean",
+    "rebuild": "node-gyp rebuild",
+    "dist": "node dist.js"
   },
   "repository": {
     "type": "git",

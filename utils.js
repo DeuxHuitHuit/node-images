@@ -30,7 +30,8 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    cp = require('child_process');
 
 function mkdirP ( p, mode, made ) {
     if (mode === undefined) {
@@ -91,7 +92,28 @@ function versionCompare(left, right) {
     return 0;
 }
 
+function forkToNodeGyp(args, done) {
+    cp.spawn(
+        process.platform === 'win32' ? 'node-gyp.cmd' : 'node-gyp', args, {
+        stdio: [0, 1, 2]
+    })
+    .on('exit', function (err) {
+        if (err) {
+            if (err === 127) {
+                console.error(
+                    'node-gyp not found! Please upgrade your install of npm! You need at least 1.1.5 (I think) ' +
+                    'and preferably 5.x.x.'
+                );
+            } else {
+                console.error('Build failed');
+            }
+        }
+        done(err);
+    });
+}
+
 module.exports = {
     mkdirP: mkdirP,
-    versionCompare: versionCompare
+    versionCompare: versionCompare,
+    forkToNodeGyp: forkToNodeGyp
 }
