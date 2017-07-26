@@ -1,3 +1,5 @@
+'use strict';
+
 var images = require("../");
 
 images("input.png")
