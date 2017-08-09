@@ -1,12 +1,12 @@
 {
-     'variables': {
-         'with_png%':  'true',
-         'with_jpeg%': 'true',
-         'with_gif%':  'true',
-         'with_webp%': 'true',
-         'with_bmp%':  'false',
-         'with_raw%':  'true',
-     },
+    'variables': {
+        'with_png%':  'true',
+        'with_jpeg%': 'true',
+        'with_gif%':  'true',
+        'with_webp%': 'true',
+        'with_bmp%':  'false',
+        'with_raw%':  'true',
+    },
     'targets': [{
         'target_name': 'binding',
         'sources': [
@@ -59,25 +59,43 @@
         'cflags': [
             '-Wall',
         ],
+        'cflags!': [
+            '-g'
+        ],
         'xcode_settings': {
-            'OTHER_CFLAGS': [
-                '-Wall',
-             ]
+            'WARNING_CFLAGS!': [
+                '-W'
+            ],
+            'CLANG_CXX_LIBRARY': 'libc++',
+            'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
+            'GCC_ENABLE_CPP_RTTI': 'YES',
+            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+            'MACOSX_DEPLOYMENT_TARGET':'10.9',
         },
     }],
-    'configurations': {
-        'Debug': {
-            'cflags': [ '-g', '-O0' ],
-            'xcode_settings': {
-                'OTHER_CFLAGS': [ '-g', '-O0' ]
+    'target_defaults': {
+        'default_configuration': 'Release',
+        'configurations': {
+            'Debug': {
+                'defines': [
+                    'ASAN_OPTIONS=symbolize=1'
+                ],
+                'xcode_settings': {
+                    'GCC_OPTIMIZATION_LEVEL': '0',
+                    'GCC_GENERATE_DEBUGGING_SYMBOLS': 'YES',
+                }
+            },
+            'Release': {
+                'defines': [ 'NDEBUG' ],
+                'cflags!': ['-Os'],
+                'cflags': ['-O3'],
+                'xcode_settings': {
+                    'GCC_OPTIMIZATION_LEVEL': '3',
+                    'GCC_GENERATE_DEBUGGING_SYMBOLS': 'NO',
+                    'DEAD_CODE_STRIPPING': 'YES',
+                    'GCC_INLINES_ARE_PRIVATE_EXTERN': 'YES',
+                }
             }
         },
-        'Release': {
-            'cflags': [ '-g', '-O3' ],
-            'defines': [ 'NDEBUG' ],
-            'xcode_settings': {
-                'OTHER_CFLAGS': [ '-g', '-O3' ]
-            }
-        }
-    },
+    }
 }
