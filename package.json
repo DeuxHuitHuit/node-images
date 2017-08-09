@@ -7,9 +7,9 @@
     "test": "cd test && (node index.js; cd -)",
     "install": "node ./scripts/install.js",
     "configure": "cd gyp; rm -rf ./third-party/* && ./third-party.sh; cd ..; node-gyp configure",
-    "build": "node-gyp build",
-    "clean": "node-gyp clean",
-    "rebuild": "node-gyp rebuild",
+    "build": "node-gyp build -j 4",
+    "clean": "node-gyp clean -j 4",
+    "rebuild": "node-gyp rebuild -j 4",
     "dist": "node dist.js"
   },
   "repositoryName": "zhangyuanwei/node-images",
