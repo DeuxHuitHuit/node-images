@@ -92,6 +92,19 @@ function versionCompare(left, right) {
     return 0;
 }
 
+function forkToNpm(args, done) {
+    cp.spawn(
+        process.platform === 'win32' ? 'npm.cmd' : 'npm', args, {
+        stdio: [0, 1, 2]
+    })
+    .on('exit', function (err) {
+        if (err) {
+            console.error('npm failed');
+        }
+        done(err);
+    });
+}
+
 function forkToNodeGyp(args, done) {
     cp.spawn(
         process.platform === 'win32' ? 'node-gyp.cmd' : 'node-gyp', args, {
@@ -115,5 +128,6 @@ function forkToNodeGyp(args, done) {
 module.exports = {
     mkdirP: mkdirP,
     versionCompare: versionCompare,
-    forkToNodeGyp: forkToNodeGyp
+    forkToNodeGyp: forkToNodeGyp,
+    forkToNpm: forkToNpm
 }

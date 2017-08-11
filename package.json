@@ -39,9 +39,10 @@
     ]
   },
   "scripts": {
+    "third-party": "cd gyp; rm -rf ./third-party/* && ./third-party.sh; cd ..;",
     "install": "node install.js",
     "test": "cd test && (node index.js; cd -)",
-    "configure": "cd gyp; rm -rf ./third-party/* && ./third-party.sh; cd ..; node-gyp configure",
+    "configure": "node-gyp configure",
     "build": "node-gyp build -j 4",
     "clean": "node-gyp clean -j 4",
     "rebuild": "node-gyp rebuild -j 4",

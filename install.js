@@ -145,10 +145,14 @@ function download() {
 
 // try to rebuild this.
 function rebuild( error ) {
-    var done = this,
-        args = ['rebuild', '--release', '--silent', '-j 4'];
-
-    utils.forkToNodeGyp(args, done);
+    var done = this;
+    utils.forkToNpm(['run', 'third-party'], function (err) {
+        if (err) {
+            done(err);
+        } else {
+            utils.forkToNodeGyp(['rebuild', '--release', '--silent', '-j 4'], done);
+        }
+    });
 }
 
 // simply include the binding.js script.
@@ -157,12 +161,10 @@ function test( err ) {
     if ( !err ) {
         try {
             delete require.cache[ require.resolve('./binding.js') ];
-
             require('./binding.js');
-            this( false );
         } catch ( e ) {
             console.error('Test failed!');
-            err = true;
+            err = e;
         }
     }
 
