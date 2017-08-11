@@ -35,3 +35,5 @@ images("input.webp")
 images("input.gif")
     .size( 200 )
     .save("output_old_gif.jpg");
+
+console.log('All good!');
