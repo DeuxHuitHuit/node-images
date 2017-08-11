@@ -11,6 +11,11 @@
 
 /lib
 
+giflib
+libjpeg-turbo
+libpng
+libwep
+zlib
 
 .DS_Store
 
