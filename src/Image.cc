@@ -115,8 +115,23 @@ void inline SET_OBJECT_ACCESSOR(Local<Object> exports,
                                 v8::AccessorSetterCallback setter)
 { // {{{
     exports->SetAccessor(String::NewFromUtf8(isolate, name.c_str()), getter, setter);
-    } //}}}
+} //}}}
 #endif
+
+// The Number returning function Value::ToNumber has been deprecated
+Local<v8::Number> inline TO_NUMBER(Local<Value> o)
+{ // {{{
+#if NODE_VERSION_AT_LEAST(6, 0, 0)
+    MaybeLocal<v8::Number> n = o->ToNumber(Isolate::GetCurrent()->GetCurrentContext());
+    if (n.IsEmpty()) {
+        THROW_ERROR("Could not convert empty value to number");
+        return Local<v8::Number>();
+    }
+    return n.ToLocalChecked();
+#else
+    return o->ToNumber();
+#endif
+} //}}}
 
 void Image::Init(Local<Object> exports) { // {{{
     Isolate *isolate = exports->GetIsolate();
@@ -282,7 +297,7 @@ void Image::Resize(const FunctionCallbackInfo<Value> &args) {
     }
 
     Image *img = node::ObjectWrap::Unwrap<Image>(args.This());
-    img->pixels->Resize(args[0]->ToNumber()->Value(), args[1]->ToNumber()->Value(), filter);
+    img->pixels->Resize(TO_NUMBER(args[0])->Value(), TO_NUMBER(args[1])->Value(), filter);
 
     args.GetReturnValue().Set(v8::Undefined(args.GetIsolate()));
 }
