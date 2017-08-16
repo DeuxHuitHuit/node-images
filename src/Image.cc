@@ -50,7 +50,10 @@ using v8::MaybeLocal;
 using v8::ObjectTemplate;
 using v8::PropertyCallbackInfo;
 using v8::Object;
-
+#if NODE_VERSION_AT_LEAST(6, 0, 0)
+using v8::Maybe;
+using v8::MaybeLocal;
+#endif
 
 //#define SET_ERROR_FILE_LINE(file, line, msg) Image::SetError( file #line msg)
 //#define SET_ERROR(msg) SET_ERROR_FILE_LINE(__FILE__, __LINE__, meg)
@@ -82,6 +85,38 @@ ImageCodec *Image::codecs;
 size_t Image::maxWidth = DEFAULT_WIDTH_LIMIT;
 size_t Image::maxHeight = DEFAULT_HEIGHT_LIMIT;
 const char *Image::error = NULL;
+
+// The bool returning function Object::SetAccessor has been deprecated
+#if NODE_VERSION_AT_LEAST(6, 0, 0)
+void inline SET_OBJECT_ACCESSOR(Local<Object> exports,
+                                Isolate *isolate,
+                                std::string name,
+                                v8::AccessorNameGetterCallback getter,
+                                v8::AccessorNameSetterCallback setter)
+{ // {{{
+    // Use the maybe version
+    MaybeLocal<String> mname = String::NewFromUtf8(isolate, name.c_str(), String::kNormalString);
+    Maybe<bool> ms = exports->SetAccessor(
+        isolate->GetCurrentContext(),
+        mname.ToLocalChecked(),
+        getter,
+        setter
+    );
+    if (!ms.FromMaybe(false)) {
+        THROW(Exception::Error(String::NewFromUtf8(isolate, ("Could not set " + name).c_str())));
+    }
+} //}}}
+#else
+// Use deprecated call
+void inline SET_OBJECT_ACCESSOR(Local<Object> exports,
+                                Isolate *isolate,
+                                std::string name,
+                                v8::AccessorGetterCallback getter,
+                                v8::AccessorSetterCallback setter)
+{ // {{{
+    exports->SetAccessor(String::NewFromUtf8(isolate, name.c_str()), getter, setter);
+    } //}}}
+#endif
 
 void Image::Init(Local<Object> exports) { // {{{
     Isolate *isolate = exports->GetIsolate();
@@ -118,10 +153,9 @@ void Image::Init(Local<Object> exports) { // {{{
     NODE_DEFINE_CONSTANT(exports, TYPE_RAW);
     NODE_DEFINE_CONSTANT(exports, TYPE_WEBP);
 
-
-    exports->SetAccessor(String::NewFromUtf8(isolate, "maxWidth"), GetMaxWidth, SetMaxWidth);
-    exports->SetAccessor(String::NewFromUtf8(isolate, "maxHeight"), GetMaxHeight, SetMaxHeight);
-    exports->SetAccessor(String::NewFromUtf8(isolate, "usedMemory"), GetUsedMemory);
+    SET_OBJECT_ACCESSOR(exports, isolate, "maxWidth", GetMaxWidth, SetMaxWidth);
+    SET_OBJECT_ACCESSOR(exports, isolate, "maxHeight", GetMaxHeight, SetMaxHeight);
+    SET_OBJECT_ACCESSOR(exports, isolate, "usedMemory", GetUsedMemory, nullptr);
     NODE_SET_METHOD(exports, "gc", GC);
 
     exports->Set(String::NewFromUtf8(isolate, "Image"), tpl->GetFunction());
@@ -143,22 +177,22 @@ bool Image::isError(){ // {{{
     return error != NULL;
 } // }}}
 
-void Image::GetMaxWidth(Local<String> property, const PropertyCallbackInfo<Value> &args) { // {{{
+void Image::GetMaxWidth(LOCAL_NAME property, const PropertyCallbackInfo<Value> &args) { // {{{
     Isolate *isolate = args.GetIsolate();
     args.GetReturnValue().Set(Number::New(isolate, maxWidth));
-
 } // }}}
 
-void Image::SetMaxWidth(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void> &args) { // {{{
+void Image::SetMaxWidth(LOCAL_NAME property, Local<Value> value, const PropertyCallbackInfo<void> &args) { // {{{
     if(value->IsNumber())
         maxWidth = value->Uint32Value();
 } // }}}
 
-void Image::GetMaxHeight(Local<String> property, const PropertyCallbackInfo<Value> &args) { // {{{
-
+void Image::GetMaxHeight(LOCAL_NAME property, const PropertyCallbackInfo<Value> &args) { // {{{
+    Isolate *isolate = args.GetIsolate();
+    args.GetReturnValue().Set(Number::New(isolate, maxHeight));
 } // }}}
 
-void Image::SetMaxHeight(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void> &args) { // {{{
+void Image::SetMaxHeight(LOCAL_NAME property, Local<Value> value, const PropertyCallbackInfo<void> &args) { // {{{
     if(value->IsNumber())
         maxHeight = value->Uint32Value();
 } // }}}
@@ -166,7 +200,7 @@ void Image::SetMaxHeight(Local<String> property, Local<Value> value, const Prope
 // Memory
 size_t Image::usedMemory = 0;
 
-void Image::GetUsedMemory(Local<String> property, const PropertyCallbackInfo<Value>&args) { // {{{
+void Image::GetUsedMemory(LOCAL_NAME property, const PropertyCallbackInfo<Value>&args) { // {{{
     Isolate *isolate = args.GetIsolate();
     args.GetReturnValue().Set(Number::New(isolate, usedMemory));
 } // }}}
