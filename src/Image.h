@@ -121,7 +121,13 @@ typedef struct ImageCodec {
 #define DECODER(type) decode ## type
 #define DECODER_FN(type) ImageState DECODER(type)(PixelArray *output, ImageData *input)
 #define IMAGE_CODEC(type) DECODER_FN(type); ENCODER_FN(type)
-
+// Macro-Type used for the name of the javascript function type
+// It changed starting at node 6
+#if NODE_VERSION_AT_LEAST(6, 0, 0)
+#define LOCAL_NAME v8::Local<v8::Name>
+#else
+#define LOCAL_NAME v8::Local<v8::String>
+#endif
 
 #ifdef HAVE_PNG
 IMAGE_CODEC(Png);
@@ -164,18 +170,18 @@ class Image : public node::ObjectWrap {
         // Size Limit
         static size_t maxWidth, maxHeight;
 
-        static void GetMaxWidth(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value> &args);
+        static void GetMaxWidth(LOCAL_NAME, const v8::PropertyCallbackInfo<v8::Value> &args);
 
-        static void SetMaxWidth(v8::Local<v8::String>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<void> &args);
+        static void SetMaxWidth(LOCAL_NAME, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<void> &args);
 
-        static void GetMaxHeight(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value> &args);
+        static void GetMaxHeight(LOCAL_NAME, const v8::PropertyCallbackInfo<v8::Value> &args);
 
-        static void SetMaxHeight(v8::Local<v8::String>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<void> &args);
+        static void SetMaxHeight(LOCAL_NAME, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<void> &args);
 
         // Memory
         static size_t usedMemory;
 
-        static void GetUsedMemory(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value> &args);
+        static void GetUsedMemory(LOCAL_NAME, const v8::PropertyCallbackInfo<v8::Value> &args);
 
         static void GC(const v8::FunctionCallbackInfo<v8::Value> &args);
 
