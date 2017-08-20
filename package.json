@@ -39,8 +39,10 @@
     ]
   },
   "scripts": {
-    "test": "node test.js",
-    "install": "echo \"Hello, World.\""
+    "install": "node install.js",
+    "configure": "cd gyp && rm -rf ./third-party/* && ./third-party.sh && cd .. && node-gyp configure",
+    "build": "node-gyp build",
+    "clean": "node-gyp clean"
   },
   "repository": {
     "type": "git",
