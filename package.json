@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
-    "install": "node ./scripts/install.js"
+    "install": "node ./scripts/install.js",
+    "configure": "cd gyp && rm -rf ./third-party/* && ./third-party.sh && cd .. && node-gyp configure",
+    "build": "node-gyp build",
+    "clean": "node-gyp clean"
   },
   "repositoryName": "zhangyuanwei/node-images",
   "repository": {
