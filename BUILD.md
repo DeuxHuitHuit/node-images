@@ -68,3 +68,4 @@ node-gyp configure --release --target=vX.Y.Z --silent
 node-gyp build --release --silent -j 4
 ```
 
+For a debug build, replace `--release` with `--debug`
