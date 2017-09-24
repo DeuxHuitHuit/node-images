@@ -12,6 +12,7 @@ On all platforms, the only supported shell is `bash`.
     - libtool `brew install libtool`
     - cmake `brew install cmake`
     - autoconf `brew install autoconf`
+    - automake `brew install automake`
     - python 2.7 (should already be on your mac)
     - nasm `brew install nasm`
     - node-gyp `npm -g i node-gyp`
