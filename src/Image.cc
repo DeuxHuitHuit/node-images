@@ -308,8 +308,6 @@ void Image::Resize(const FunctionCallbackInfo<Value> &args) {
  */
 void Image::Rotate(const FunctionCallbackInfo<Value> &args) {
 
-    char *filter = NULL;
-
     if( !args[0]->IsNull() && !args[0]->IsUndefined () && !args[0]->IsNumber() ) {
         THROW_INVALID_ARGUMENTS_ERROR("Arguments error");
         return;
@@ -880,8 +878,6 @@ ImageState PixelArray::Resize(size_t w, size_t h, const char *filter){
 
 ImageState PixelArray::Rotate(size_t deg){
     PixelArray newArray, *pixels;
-    size_t w,h;
-    
     deg = deg % 360;
 
     if(data != NULL){
