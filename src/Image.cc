@@ -316,7 +316,7 @@ void Image::Rotate(const FunctionCallbackInfo<Value> &args) {
     }
 
     Image *img = node::ObjectWrap::Unwrap<Image>(args.This());
-    img->pixels->Rotate(args[0]->ToNumber()->Value());
+    img->pixels->Rotate(TO_NUMBER(args[0])->Value());
 
     args.GetReturnValue().Set(v8::Undefined(args.GetIsolate()));
 }
