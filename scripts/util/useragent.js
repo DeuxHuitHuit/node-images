@@ -8,6 +8,6 @@ var pkg = require('../../package.json');
 module.exports = function() {
   return [
     'node/', process.version, ' ',
-    'fis-installer/', pkg.version
+    'images-installer/', pkg.version
   ].join('');
 };

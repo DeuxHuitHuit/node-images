@@ -1,5 +1,5 @@
 /*!
- * addon for fis: lib/extensions.js
+ * addon for images: lib/extensions.js
  */
 
 var eol = require('os').EOL,
@@ -81,7 +81,7 @@ function getHumanNodeVersion(abi) {
 }
 
 /**
- * Get a human readable description of where addon for fis is running to support
+ * Get a human readable description of where addon for images is running to support
  * user error reporting when something goes wrong
  *
  * @param  {string} env - The name of the native bindings that is to be parsed
@@ -121,7 +121,7 @@ function getHumanEnvironment(env) {
 /**
  * Get the value of the binaries under the default path
  *
- * @return {Array} The currently installed addon for fis bindings
+ * @return {Array} The currently installed addon for images bindings
  *
  * @api public
  */
@@ -136,7 +136,7 @@ function getInstalledBinaries() {
  * @param  {string} platform - The name of the OS platform(darwin, win32, etc...)
  * @param  {string} arch - The instruction set architecture of the Node environment
  * @param  {string} abi - The Node Application Binary Interface
- * @return {Boolean} True, if addon for fis supports the current platform, false otherwise
+ * @return {Boolean} True, if addon for image supports the current platform, false otherwise
  *
  * @api public
  */
@@ -169,8 +169,8 @@ function getArgument(name, args) {
 
 /**
  * Get binary name.
- * If environment variable FIS_BINARY_NAME,
- * .npmrc variable FIS_binary_name or
+ * If environment variable IMAGES_BINARY_NAME,
+ * .npmrc variable IMAGES_binary_name or
  * process argument --binary-name is provided,
  * return it as is, otherwise make default binary
  * name: {platform}-{arch}-{v8 version}.node
@@ -183,12 +183,12 @@ function getBinaryName() {
     variant,
     platform = process.platform;
 
-  if (getArgument('--fis-binary-name')) {
-    binaryName = getArgument('--fis-binary-name');
-  } else if (process.env.FIS_BINARY_NAME) {
-    binaryName = process.env.FIS_BINARY_NAME;
-  } else if (process.env.npm_config_FIS_binary_name) {
-    binaryName = process.env.npm_config_FIS_binary_name;
+  if (getArgument('--images-binary-name')) {
+    binaryName = getArgument('--images-binary-name');
+  } else if (process.env.IMAGES_BINARY_NAME) {
+    binaryName = process.env.IMAGES_BINARY_NAME;
+  } else if (process.env.npm_config_IMAGES_binary_name) {
+    binaryName = process.env.npm_config_IMAGES_binary_name;
   } else if (pkg.nodeConfig && pkg.nodeConfig.binaryName) {
     binaryName = pkg.nodeConfig.binaryName;
   } else {
@@ -209,20 +209,20 @@ function getBinaryName() {
 
 /**
  * Determine the URL to fetch binary file from.
- * By default fetch from the addon for fis distribution
+ * By default fetch from the addon for images distribution
  * site on GitHub.
  *
  * The default URL can be overriden using
- * the environment variable FIS_BINARY_SITE,
- * .npmrc variable FIS_binary_site or
- * or a command line option --fis-binary-site:
+ * the environment variable IMAGES_BINARY_SITE,
+ * .npmrc variable IMAGES_binary_site or
+ * or a command line option --images-binary-site:
  *
- *   node scripts/install.js --fis-binary-site http://example.com/
+ *   node scripts/install.js --images-binary-site http://example.com/
  *
  * The URL should to the mirror of the repository
  * laid out as follows:
  *
- * FIS_BINARY_SITE/
+ * IMAGES_BINARY_SITE/
  *
  *  v3.0.0
  *  v3.0.0/freebsd-x64-14_binding.node
@@ -236,9 +236,9 @@ function getBinaryName() {
  */
 
 function getBinaryUrl() {
-  var site = getArgument('--fis-binary-site') ||
-             process.env.FIS_BINARY_SITE  ||
-             process.env.npm_config_FIS_binary_site ||
+  var site = getArgument('--images-binary-site') ||
+             process.env.IMAGES_BINARY_SITE  ||
+             process.env.npm_config_IMAGES_binary_site ||
              (pkg.nodeConfig && pkg.nodeConfig.binarySite) ||
              'https://github.com/' + repositoryName + '/releases/download';
 
@@ -247,9 +247,9 @@ function getBinaryUrl() {
 
 /**
  * Get binary path.
- * If environment variable FIS_BINARY_PATH,
- * .npmrc variable FIS_binary_path or
- * process argument --fis-binary-path is provided,
+ * If environment variable IMAGES_BINARY_PATH,
+ * .npmrc variable IMAGES_binary_path or
+ * process argument --IMAGES-binary-path is provided,
  * select it by appending binary name, otherwise
  * make default binary path using binary name.
  * Once the primary selection is made, check if
@@ -262,12 +262,12 @@ function getBinaryUrl() {
 function getBinaryPath() {
   var binaryPath;
 
-  if (getArgument('--fis-binary-path')) {
-    binaryPath = getArgument('--fis-binary-path');
-  } else if (process.env.FIS_BINARY_PATH) {
-    binaryPath = process.env.FIS_BINARY_PATH;
-  } else if (process.env.npm_config_FIS_binary_path) {
-    binaryPath = process.env.npm_config_FIS_binary_path;
+  if (getArgument('--images-binary-path')) {
+    binaryPath = getArgument('--images-binary-path');
+  } else if (process.env.IMAGES_BINARY_PATH) {
+    binaryPath = process.env.IMAGES_BINARY_PATH;
+  } else if (process.env.npm_config_IMAGES_binary_path) {
+    binaryPath = process.env.npm_config_IMAGES_binary_path;
   } else if (pkg.nodeConfig && pkg.nodeConfig.binaryPath) {
     binaryPath = pkg.nodeConfig.binaryPath;
   } else {
@@ -285,7 +285,7 @@ function getBinaryPath() {
  */
 function getCachePathCandidates() {
   return [
-    process.env.npm_config_FIS_binary_cache,
+    process.env.npm_config_IMAGES_binary_cache,
     process.env.npm_config_cache,
   ].filter(function(_) { return _; });
 }
