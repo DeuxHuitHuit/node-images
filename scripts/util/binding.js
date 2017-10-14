@@ -8,6 +8,9 @@ var errors = require('./errors'),
  * Require binding
  */
 module.exports = function() {
+  if (extensions.hasBinary(extensions.getBinaryBuildPath())) {
+    return require(extensions.getBinaryBuildPath());
+  }
   if (!extensions.hasBinary(extensions.getBinaryPath())) {
     if (!extensions.isSupportedEnvironment()) {
       throw new Error(errors.unsupportedEnvironment());

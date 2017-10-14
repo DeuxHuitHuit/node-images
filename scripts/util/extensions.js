@@ -8,6 +8,7 @@ var eol = require('os').EOL,
   mkdir = require('mkdirp'),
   path = require('path'),
   defaultBinaryPath = path.join(__dirname, '..', '..', 'vendor'),
+  defaultBuildPath = path.join(__dirname, '..', '..', 'build/Release'),
   repositoryName = pkg.repositoryName;
 
 /**
@@ -277,6 +278,24 @@ function getBinaryPath() {
   return binaryPath;
 }
 
+function getBinaryBuildPath() {
+  var buildPath;
+
+  if (getArgument('--images-build-path')) {
+    buildPath = getArgument('--images-build-path');
+  } else if (process.env.IMAGES_BUILD_PATH) {
+    buildPath = process.env.IMAGES_BUILD_PATH;
+  } else if (process.env.npm_config_IMAGES_build_path) {
+    buildPath = process.env.npm_config_IMAGES_build_path;
+  } else if (pkg.nodeConfig && pkg.nodeConfig.buildPath) {
+    buildPath = pkg.nodeConfig.buildPath;
+  } else {
+    buildPath = path.join(defaultBuildPath, 'binding.node');
+  }
+
+  return path.resolve(buildPath);
+}
+
 /**
  * An array of paths suitable for use as a local disk cache of the binding.
  *
@@ -408,6 +427,7 @@ module.exports.hasBinary = hasBinary;
 module.exports.getBinaryUrl = getBinaryUrl;
 module.exports.getBinaryName = getBinaryName;
 module.exports.getBinaryPath = getBinaryPath;
+module.exports.getBinaryBuildPath = getBinaryBuildPath;
 module.exports.getBinaryCachePath = getBinaryCachePath;
 module.exports.getCachedBinary = getCachedBinary;
 module.exports.getCachePathCandidates = getCachePathCandidates;

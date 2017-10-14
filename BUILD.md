@@ -52,11 +52,7 @@ On all platforms, the only supported shell is `bash`.
 
 The compiled binding file will be at `./build/Release/binding.node`
 
-### 3. Install local binary
-
-`npm install --images-binary-path=build/Release/binding.node`
-
-### 4. Run the tests
+### 3. Run the tests
 
 `npm test`
 
@@ -70,4 +66,6 @@ node-gyp build --release --silent -j 4
 ```
 
 For a debug build, replace `--release` with `--debug` and
-`build/Release/binding.node` with `build/Debug/binding.node`
+run your app with with:
+
+`node app.js --images-build-path build/Debug/binding.node`
