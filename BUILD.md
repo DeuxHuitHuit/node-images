@@ -52,15 +52,15 @@ On all platforms, the only supported shell is `bash`.
 
 The compiled binding file will be at `./build/Release/binding.node`
 
-### 3. Run the tests
+### 3. Install local binary
+
+`npm install --images-binary-path=build/Release/binding.node`
+
+### 4. Run the tests
 
 `npm test`
 
 > All good!
-
-## Update distribution binaries
-
-`npm run dist`
 
 ## Build for specific node version
 
@@ -69,4 +69,5 @@ node-gyp configure --release --target=vX.Y.Z --silent
 node-gyp build --release --silent -j 4
 ```
 
-For a debug build, replace `--release` with `--debug`
+For a debug build, replace `--release` with `--debug` and
+`build/Release/binding.node` with `build/Debug/binding.node`

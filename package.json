@@ -10,8 +10,7 @@
     "configure": "node-gyp configure",
     "build": "node-gyp build -j 4",
     "clean": "node-gyp clean -j 4",
-    "rebuild": "node-gyp rebuild -j 4",
-    "dist": "node dist.js"
+    "rebuild": "node-gyp rebuild -j 4"
   },
   "repositoryName": "zhangyuanwei/node-images",
   "repository": {
