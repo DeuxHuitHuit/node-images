@@ -74,8 +74,11 @@ using v8::MaybeLocal;
 #define DEFAULT_WIDTH_LIMIT  10240 // default limit 10000x10000
 #define DEFAULT_HEIGHT_LIMIT 10240 // default limit 10000x10000
 
-#define AdjustAmountOfExternalAllocatedMemory(bc) static_cast<int>( \
-        v8::Isolate::GetCurrent()->AdjustAmountOfExternalAllocatedMemory(bc));
+// Get rid of warnings
+#define UNUSED(x) ((void)(x))
+
+#define AdjustAmountOfExternalAllocatedMemory(bc) \
+    UNUSED(v8::Isolate::GetCurrent()->AdjustAmountOfExternalAllocatedMemory(bc))
 
 Persistent<Function> Image::constructor;
 
@@ -643,7 +646,7 @@ void PixelArray::Free(){ // {{{
     }
 
     width = height = 0;
-    type = EMPTY;;
+    type = EMPTY;
     data = NULL;
 } // }}}
 
