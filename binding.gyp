@@ -17,6 +17,7 @@
         ],
         'defines': [
             'V8_DEPRECATION_WARNINGS=1',
+            'V8_IMMINENT_DEPRECATION_WARNINGS=1',
             'NODE_IMAGES_ARCH_<(target_arch)',
         ],
         'conditions': [
