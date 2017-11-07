@@ -64,6 +64,14 @@
         'cflags!': [
             '-g'
         ],
+        'msvs_disabled_warnings': ['LNK4006', 'LNK4221'],
+        'msvs_settings': {
+            'VCCLCompilerTool': {
+                'AdditionalOptions': [
+                    #'/clr',
+                ],
+            }
+        },
         'xcode_settings': {
             'WARNING_CFLAGS!': [
                 '-W'
