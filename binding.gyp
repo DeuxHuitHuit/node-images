@@ -64,7 +64,7 @@
         'cflags!': [
             '-g'
         ],
-        'msvs_disabled_warnings': ['LNK4006', 'LNK4221'],
+        'msvs_disabled_warnings': ['4006', '4221'],
         'msvs_settings': {
             'VCCLCompilerTool': {
                 'AdditionalOptions': [
