@@ -58,10 +58,28 @@ using v8::MaybeLocal;
 //#define SET_ERROR_FILE_LINE(file, line, msg) Image::SetError( file #line msg)
 //#define SET_ERROR(msg) SET_ERROR_FILE_LINE(__FILE__, __LINE__, meg)
 
+
+Local<String> inline NEW_STRING(Isolate * isolate,
+                                const char * data,
+                                v8::NewStringType type = v8::NewStringType::kNormal,
+                                int length = -1)
+{
+#if NODE_VERSION_AT_LEAST(8, 5, 0)
+    MaybeLocal<String> mls = String::NewFromUtf8( isolate, data, type, length );
+    Local<String> ls = mls.ToLocalChecked();
+    if (ls.IsEmpty()) {
+        return String::Empty(isolate);
+    }
+    return ls;
+#else
+    return String::NewFromUtf8( isolate, data, type, length );
+#endif
+}
+
 #define STRINGFY(n) #n
 #define MERGE_FILE_LINE(file, line, msg) ( file ":" STRINGFY(line) " " msg)
 #define FILE_LINE(msg) MERGE_FILE_LINE(__FILE__, __LINE__, msg)
-#define ERROR(type, msg) Exception::type(String::NewFromUtf8( Isolate::GetCurrent(), msg ))
+#define ERROR(type, msg) Exception::type(NEW_STRING(Isolate::GetCurrent(), msg))
 #define THROW(err) Isolate::GetCurrent()->ThrowException(err)
 #define SET_ERROR(msg) (Image::setError(FILE_LINE(msg)))
 #define GET_ERROR() (Image::getError())
@@ -98,15 +116,15 @@ void inline SET_OBJECT_ACCESSOR(Local<Object> exports,
                                 v8::AccessorNameSetterCallback setter)
 { // {{{
     // Use the maybe version
-    MaybeLocal<String> mname = String::NewFromUtf8(isolate, name.c_str(), String::kNormalString);
+    Local<String> mname = NEW_STRING(isolate, name.c_str());
     Maybe<bool> ms = exports->SetAccessor(
         isolate->GetCurrentContext(),
-        mname.ToLocalChecked(),
+        mname,
         getter,
         setter
     );
     if (!ms.FromMaybe(false)) {
-        THROW(Exception::Error(String::NewFromUtf8(isolate, ("Could not set " + name).c_str())));
+        THROW(Exception::Error(NEW_STRING(isolate, ("Could not set " + name).c_str())));
     }
 } //}}}
 #else
@@ -144,7 +162,7 @@ void Image::Init(Local<Object> exports) { // {{{
 
     // Constructor
     Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, New);
-    tpl->SetClassName(String::NewFromUtf8(isolate, "Image"));
+    tpl->SetClassName(NEW_STRING(isolate, "Image"));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
     // Prototype
@@ -158,9 +176,9 @@ void Image::Init(Local<Object> exports) { // {{{
     NODE_SET_PROTOTYPE_METHOD(tpl, "drawImage", DrawImage);
     NODE_SET_PROTOTYPE_METHOD(tpl, "toBuffer", ToBuffer);
 
-    proto->SetAccessor(String::NewFromUtf8(isolate, "width"), GetWidth, SetWidth);
-    proto->SetAccessor(String::NewFromUtf8(isolate, "height"), GetHeight, SetHeight);
-    proto->SetAccessor(String::NewFromUtf8(isolate, "transparent"), GetTransparent);
+    proto->SetAccessor(NEW_STRING(isolate, "width"), GetWidth, SetWidth);
+    proto->SetAccessor(NEW_STRING(isolate, "height"), GetHeight, SetHeight);
+    proto->SetAccessor(NEW_STRING(isolate, "transparent"), GetTransparent);
 
     constructor.Reset(isolate, tpl->GetFunction());
 
@@ -176,7 +194,7 @@ void Image::Init(Local<Object> exports) { // {{{
     SET_OBJECT_ACCESSOR(exports, isolate, "usedMemory", GetUsedMemory, nullptr);
     NODE_SET_METHOD(exports, "gc", GC);
 
-    exports->Set(String::NewFromUtf8(isolate, "Image"), tpl->GetFunction());
+    exports->Set(NEW_STRING(isolate, "Image"), tpl->GetFunction());
 
 } //}}}
 
@@ -186,7 +204,7 @@ ImageState Image::setError(const char * err){ // {{{
 } // }}}
 
 Local<Value> Image::getError(){ // {{{
-    Local<Value> err = Exception::Error(String::NewFromUtf8(Isolate::GetCurrent(), error ? error : "Unknown Error"));
+    Local<Value> err = Exception::Error(NEW_STRING(Isolate::GetCurrent(), error ? error : "Unknown Error"));
     error = NULL;
     return err;
 } // }}}
