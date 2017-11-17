@@ -33,11 +33,16 @@ On all platforms, the only supported shell is `bash`.
 
 ### Windows (usign gitbash or cygwin)
 
-    - Visual Studio 2015 with C++
-    - cmake
-    - autoconf
-    - python 2.7
-    - wget
+    - Visual Studio 2015 with C++ `https://www.visualstudio.com/vs/older-downloads/`
+    - cmake `https://cmake.org/download/`
+    - autoconf `http://gnuwin32.sourceforge.net/packages/autoconf.htm`
+    - python 2.7 `https://www.python.org/download/releases/2.7/`
+        - make sure it is in your PATH
+        - make sure python2.exe exists, i.e. `mklink /H python2.exe python.exe`
+    - wget `http://gnuwin32.sourceforge.net/packages/wget.htm`
+        - download "Binaries"
+        - download "Dependencies"
+    - nasm `http://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D`
     - node-gyp `npm -g i node-gyp`
 
 ## Building source
